@@ -6,8 +6,16 @@ from design import Ui_MainWindow
 class MyWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        ui = Ui_MainWindow()
-        ui.setupUi(self)
+        self._ui = Ui_MainWindow()
+        self._ui.setupUi(self)
+        self._ui.btnInfo1.clicked.connect(self.btnInfo1Clicked)
+        self._ui.btnClear.clicked.connect(self.btnClearClicked)
+
+    def btnInfo1Clicked(self):
+        self._ui.textBrowser.setText('Important message')
+
+    def btnClearClicked(self):
+        self._ui.textBrowser.setText('')
 
 
 if __name__ == "__main__":
