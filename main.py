@@ -1,27 +1,47 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from design import Ui_MainWindow
+from DiceSimulatorUI import Ui_MainWindow
+from random import randint
+
+class DiceThread(QtCore.QThread):
+    def __init__(self):
+        super.__init__()
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
 
 
-class MyWindow(QtWidgets.QMainWindow):
+class DiceSimulator(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self._ui = Ui_MainWindow()
-        self._ui.setupUi(self)
-        self._ui.btnInfo1.clicked.connect(self.btnInfo1Clicked)
-        self._ui.btnClear.clicked.connect(self.btnClearClicked)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
-    def btnInfo1Clicked(self):
-        self._ui.textBrowser.setText('Important message')
+        self.ui.buttonStart.clicked.connect(self.button_start_clicked)
 
-    def btnClearClicked(self):
-        self._ui.textBrowser.setText('')
+    def button_start_clicked(self):
+        self.ui.lcdNumberDiceOutcome.display(dicethrow(self.ui.spinBoxDices.value()))
+
+
+def dicethrow(dices):
+    dice_sum = 0
+
+    for d in range(dices):
+        current_dice = dice()
+        dice_sum += current_dice
+
+    return dice_sum
+
+def dice():
+    return randint(1, 6)
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
-    win = MyWindow()
+    win = DiceSimulator()
     win.show()
 
     sys.exit(app.exec_())
