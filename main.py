@@ -11,6 +11,7 @@ class DiceThread(QtCore.QThread):
         self.wait()
 
     def run(self):
+        pass
 
 
 class DiceSimulator(QtWidgets.QMainWindow):
