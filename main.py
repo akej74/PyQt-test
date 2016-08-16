@@ -13,21 +13,17 @@ from random import randint
 #    def run(self):
 #        pass
 
-class Communicate(QtCore.QObject):
-    # Signal to send the value of a dice throw
-    dice_throw_signal = QtCore.pyqtSignal(int)
 
 class DiceSimulator(QtWidgets.QMainWindow):
+    dice_throw_signal = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.c = Communicate()
-
         # Connect the dice_throw_signal to the LDC display
-        self.c.dice_throw_signal.connect(self.ui.lcdNumberDiceOutcome.display)
+        self.dice_throw_signal.connect(self.ui.lcdNumberDiceOutcome.display)
 
         # Set the default value of the spinbox to 1
         self.ui.spinBoxDices.setValue(1)
@@ -48,7 +44,7 @@ class DiceSimulator(QtWidgets.QMainWindow):
             dice_sum += current_dice
 
         # Emit the "dice_throw" signal
-        self.c.dice_throw_signal.emit(dice_sum)
+        self.dice_throw_signal.emit(dice_sum)
 
 
     def dice(self):
