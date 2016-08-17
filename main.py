@@ -7,20 +7,26 @@ import time
 class DiceThread(QtCore.QThread):
     dice_throw_signal = QtCore.pyqtSignal(int)
 
-    def __init__(self, dices, throws_per_second):
+    def __init__(self):
         super().__init__()
-        self.dices = dices
-        self.throws_per_second = throws_per_second
 
     def __del__(self):
         self.wait()
+
+    def set_parameters(self, dices, throws_per_second):
+        self.dices = dices
+        self.throws_per_second = throws_per_second
 
     def run(self):
         print("Run method!")
         print(self.dices)
         print(self.throws_per_second)
-        self.dice_throw_signal.emit(dicethrow(self.dices))
 
+        #while True:
+        #    sleep(1/self.throws_per_second)
+        #    self.dice_throw_signal.emit(dicethrow(self.dices))
+
+        self.dice_throw_signal.emit(dicethrow(self.dices))
 
 def dicethrow(dices):
 
@@ -37,14 +43,14 @@ def dicethrow(dices):
 def dice():
     return randint(1, 6)
 
-
 class DiceSimulator(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.thread = DiceThread(self.ui.spinBoxDices.value(), self.ui.spinBoxThrows.value())
+        # Create the thread
+        self.thread = DiceThread()
 
         # Set the default value of the spinbox to 1
         self.ui.spinBoxDices.setValue(1)
@@ -63,7 +69,8 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.ui.buttonStart.setEnabled(False)
         self.ui.buttonStop.setEnabled(True)
 
-        #thread = DiceThread(self.ui.spinBoxDices.value(), self.ui.spinBoxThrows.value())
+        # Set current parameters for the thread
+        self.thread.set_parameters(self.ui.spinBoxDices.value(), self.ui.spinBoxThrows.value())
 
         self.thread.start()
 
