@@ -31,6 +31,7 @@ def dicethrow(dices):
         dice_sum += current_dice
 
     #time.sleep(0.5)
+    print("Current dice sum " + str(dice_sum))
     return dice_sum
 
 def dice():
@@ -43,18 +44,34 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.thread = DiceThread(self.ui.spinBoxDices.value(), self.ui.spinBoxThrows.value())
+
         # Set the default value of the spinbox to 1
         self.ui.spinBoxDices.setValue(1)
 
-        # Connect the "button start click" to the "button_start_clicked" method
-        self.ui.buttonStart.clicked.connect(self.button_start_clicked)
+        # Disable "Stop" button
+        self.ui.buttonStop.setEnabled(False)
 
+        # Connect signals to slots
+        self.ui.buttonStart.clicked.connect(self.button_start_clicked)
+        self.ui.buttonStop.clicked.connect(self.button_stop_clicked)
+        self.thread.dice_throw_signal.connect(self.ui.lcdNumberDiceOutcome.display)
 
     def button_start_clicked(self):
-        thread = DiceThread(self.ui.spinBoxDices.value(), self.ui.spinBoxThrows.value())
-        thread.dice_throw_signal.connect(self.ui.lcdNumberDiceOutcome.display)
-        thread.start()
 
+        # Disable "Start" and enable "Stop" button to prevent more that one thread to be started
+        self.ui.buttonStart.setEnabled(False)
+        self.ui.buttonStop.setEnabled(True)
+
+        #thread = DiceThread(self.ui.spinBoxDices.value(), self.ui.spinBoxThrows.value())
+
+        self.thread.start()
+
+    def button_stop_clicked(self):
+        print("Thread terminated!")
+        self.thread.terminate()
+        self.ui.buttonStart.setEnabled(True)
+        self.ui.buttonStop.setEnabled(False)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
