@@ -10,6 +10,7 @@ class DiceThread(QtCore.QThread):
 
     def __init__(self):
         super().__init__()
+        self.keep_running = True
 
     def __del__(self):
         self.wait()
@@ -18,13 +19,16 @@ class DiceThread(QtCore.QThread):
         self.dices = dices
         self.throws_per_second = throws_per_second
 
+    def stop(self):
+        self.keep_running = False
+
     def run(self):
         print("Run method!")
         print(self.dices)
         print(self.throws_per_second)
 
         # Run a loop to call "dicethrow" x times every second
-        while True:
+        while self.keep_running is True:
             try:
                 t0 = time.time()
 
@@ -81,8 +85,9 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.thread.start()
 
     def button_stop_clicked(self):
-        print("Thread terminated!")
-        self.thread.terminate()
+        print("Stop!")
+        #self.thread.terminate()
+        self.thread.stop()
         self.ui.buttonStart.setEnabled(True)
         self.ui.buttonStop.setEnabled(False)
         self.ui.spinBoxDices.setEnabled(True)
