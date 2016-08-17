@@ -6,6 +6,7 @@ import time
 
 class DiceThread(QtCore.QThread):
     dice_throw_signal = QtCore.pyqtSignal(int)
+    actual_throws_per_second_signal = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
@@ -22,23 +23,26 @@ class DiceThread(QtCore.QThread):
         print(self.dices)
         print(self.throws_per_second)
 
-        #
-        #while True:
-        #    sleep(1/self.throws_per_second)
-        #    self.dice_throw_signal.emit(dicethrow(self.dices))
+        # Run a loop to call "dicethrow" x times every second
+        while True:
+            try:
+                t0 = time.time()
 
-        self.dice_throw_signal.emit(dicethrow(self.dices))
+                time.sleep(1/self.throws_per_second)
+                self.dice_throw_signal.emit(dicethrow(self.dices))
+
+                t1 = time.time()
+                self.actual_throws_per_second_signal.emit(1/(t1 - t0))
+            except:
+                (type, value, traceback) = sys.exc_info()
+                sys.excepthook(type, value, traceback)
 
 def dicethrow(dices):
-
-    #for t in range(5):
     dice_sum = 0
     for d in range(dices):
         current_dice = dice()
         dice_sum += current_dice
 
-    #time.sleep(0.5)
-    print("Current dice sum " + str(dice_sum))
     return dice_sum
 
 def dice():
@@ -53,9 +57,6 @@ class DiceSimulator(QtWidgets.QMainWindow):
         # Create the thread
         self.thread = DiceThread()
 
-        # Set the default value of the spinbox to 1
-        self.ui.spinBoxDices.setValue(1)
-
         # Disable "Stop" button
         self.ui.buttonStop.setEnabled(False)
 
@@ -64,9 +65,13 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.ui.buttonStop.clicked.connect(self.button_stop_clicked)
         self.thread.dice_throw_signal.connect(self.ui.lcdNumberDiceOutcome.display)
 
+        self.thread.actual_throws_per_second_signal.connect(self.ui.lcdNumberActualThrows.display)
+
     def button_start_clicked(self):
 
-        # Disable "Start" and enable "Stop" button to prevent more that one thread to be started
+        # Disable "Start" and "SpinBoxes" to prevent more that one thread to be started
+        self.ui.spinBoxDices.setEnabled(False)
+        self.ui.spinBoxThrows.setEnabled(False)
         self.ui.buttonStart.setEnabled(False)
         self.ui.buttonStop.setEnabled(True)
 
@@ -80,6 +85,8 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.thread.terminate()
         self.ui.buttonStart.setEnabled(True)
         self.ui.buttonStop.setEnabled(False)
+        self.ui.spinBoxDices.setEnabled(True)
+        self.ui.spinBoxThrows.setEnabled(True)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

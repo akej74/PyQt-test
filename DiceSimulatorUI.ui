@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>317</width>
-    <height>219</height>
+    <width>381</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QLabel" name="label2">
       <property name="font">
        <font>
@@ -27,16 +27,22 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
+    <item row="0" column="3">
      <widget class="QSpinBox" name="spinBoxDices">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="maximum">
+       <number>999999999</number>
+      </property>
+      <property name="value">
+       <number>1</number>
+      </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
+    <item row="1" column="1" colspan="2">
      <widget class="QLabel" name="label3">
       <property name="font">
        <font>
@@ -48,23 +54,29 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
+    <item row="1" column="3">
      <widget class="QSpinBox" name="spinBoxThrows">
       <property name="font">
        <font>
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="maximum">
+       <number>999999999</number>
+      </property>
+      <property name="value">
+       <number>10</number>
+      </property>
      </widget>
     </item>
-    <item row="2" column="0" colspan="3">
+    <item row="2" column="1" colspan="3">
      <widget class="Line" name="line1">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="3" column="1">
      <widget class="QLabel" name="label1">
       <property name="font">
        <font>
@@ -72,18 +84,49 @@
        </font>
       </property>
       <property name="text">
-       <string>Current dice outcome:</string>
+       <string>Dice sum</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="3">
+    <item row="3" column="2" colspan="2">
+     <widget class="QLCDNumber" name="lcdNumberDiceOutcome">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="digitCount">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="3">
      <widget class="Line" name="line2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="3">
+    <item row="4" column="1">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Actual throws/s</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2" colspan="2">
+     <widget class="QLCDNumber" name="lcdNumberActualThrows">
+      <property name="digitCount">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="3">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="buttonStart">
@@ -101,20 +144,7 @@
       </item>
      </layout>
     </item>
-    <item row="3" column="1" colspan="2">
-     <widget class="QLCDNumber" name="lcdNumberDiceOutcome">
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
    </layout>
-   <zorder></zorder>
-   <zorder>label2</zorder>
-   <zorder>label3</zorder>
-   <zorder>spinBoxThrows</zorder>
    <zorder>line1</zorder>
    <zorder>label3</zorder>
    <zorder>spinBoxThrows</zorder>
@@ -123,6 +153,8 @@
    <zorder>lcdNumberDiceOutcome</zorder>
    <zorder>line2</zorder>
    <zorder>spinBoxDices</zorder>
+   <zorder>lcdNumberActualThrows</zorder>
+   <zorder>label</zorder>
   </widget>
  </widget>
  <resources/>
