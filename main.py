@@ -22,6 +22,7 @@ class DiceThread(QtCore.QThread):
         print(self.dices)
         print(self.throws_per_second)
 
+        #
         #while True:
         #    sleep(1/self.throws_per_second)
         #    self.dice_throw_signal.emit(dicethrow(self.dices))
