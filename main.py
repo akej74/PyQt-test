@@ -28,6 +28,8 @@ class DiceThread(QtCore.QThread):
         print(self.throws_per_second)
 
         # Run a loop to call "dicethrow" x times every second
+        self.keep_running = True
+
         while self.keep_running:
             try:
                 t0 = time.time()
