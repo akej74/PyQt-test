@@ -21,8 +21,8 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.settings = QtCore.QSettings('DiceSimulator', 'myApp')
 
         # Read last used settings for the spinboxes, use default values first time
-        self.ui.spinBoxDices.setValue(self.settings.value("dices", 5))
-        self.ui.spinBoxThrows.setValue(self.settings.value("throws", 10))
+        self.ui.spinBoxDices.setValue(int(self.settings.value("dices", 5)))
+        self.ui.spinBoxThrows.setValue(int(self.settings.value("throws", 10)))
 
         # Create a thread for running the dice simulation
         self.thread = DiceThread()
