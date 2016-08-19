@@ -17,12 +17,12 @@ class DiceSimulator(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # Store setting in the OS native repository (Registry for Windows, ini-file for Linux)
+        # Create QSettings object for storing configuration data in the OS native repository
+        # (Registry for Windows, ini-file for Linux)
         self.settings = QtCore.QSettings('DiceSimulator', 'myApp')
 
-        # Read last used settings for the spinboxes, use default values first time
-        self.ui.spinBoxDices.setValue(int(self.settings.value("dices", 5)))
-        self.ui.spinBoxThrows.setValue(int(self.settings.value("throws", 10)))
+        # Update UI with stored config
+        self.read_config()
 
         # Create a thread for running the dice simulation
         self.thread = DiceThread()
@@ -40,13 +40,23 @@ class DiceSimulator(QtWidgets.QMainWindow):
         # Connect the "Throws per second" signal to the other LDC
         self.thread.actual_throws_per_second_signal.connect(self.ui.lcdNumberActualThrows.display)
 
-    def closeEvent(self, e):
-        """Override the closeEvent method to save config data"""
+    def read_config(self):
+        """Reads configuration from the OS repository (Registry in Windows, ini-file in Linux).
+        Reads last used settings for the spinboxes, use default values first time.
+        type=int defines the data type (should work in a Linux environment that uses ini-files)
+        """
+        self.ui.spinBoxDices.setValue(self.settings.value("dices", 5, type=int))
+        self.ui.spinBoxThrows.setValue(self.settings.value("throws", 10, type=int))
 
-        # Write spinbox values to config file
+    def write_config(self):
+        """ Writes the config settings to the OS repository"""
+        # Write current spinbox values to config file
         self.settings.setValue("dices", self.ui.spinBoxDices.value())
         self.settings.setValue("throws", self.ui.spinBoxThrows.value())
 
+    def closeEvent(self, e):
+        """Override the closeEvent method to save config data before exiting"""
+        self.write_config()
         e.accept()
 
     def button_start_clicked(self):
