@@ -2,7 +2,7 @@ import sys
 import time
 from random import randint
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt6 import QtCore, QtWidgets
 
 from DiceSimulatorUI import Ui_MainWindow
 
@@ -166,4 +166,4 @@ if __name__ == "__main__":
     win = DiceSimulator()
     win.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
